@@ -1,4 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
+import { IonItemSliding } from '@ionic/angular';
 import { Product } from '../product.model';
 
 @Component({
@@ -14,4 +15,8 @@ export class ProductItemComponent implements OnInit {
 
   ngOnInit() { }
 
+  onEdit(productId: number, slidingElement: IonItemSliding): void {
+    slidingElement.close();
+    console.log(productId);
+  }
 }

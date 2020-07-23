@@ -16,5 +16,4 @@ export class ProductsPage {
   ionViewWillEnter() {
     this.products = this.productsService.getAllProducts();
   }
-
 }
