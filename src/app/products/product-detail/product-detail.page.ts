@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ProductsService } from '../products.service';
 import { Product } from '../product.model';
+import { AlertController } from '@ionic/angular';
 
 @Component({
   selector: 'app-product-detail',
@@ -11,11 +12,12 @@ import { Product } from '../product.model';
 export class ProductDetailPage implements OnInit {
   loadedProduct: Product;
 
-  constructor(private activatedRoute: ActivatedRoute, private productsService: ProductsService) { }
+  constructor(private router: Router, private activatedRoute: ActivatedRoute, private productsService: ProductsService, private alertController: AlertController) { }
 
   ngOnInit() {
     this.activatedRoute.paramMap.subscribe((paramMap) => {
       if (!paramMap.has('productId')) {
+        this.router.navigate(['/products']);
         return;
       }
 
@@ -23,6 +25,25 @@ export class ProductDetailPage implements OnInit {
 
       this.loadedProduct = this.productsService.getProduct(productId);
     })
+  }
+
+  onDelete(): void {
+    this.alertController.create({
+      header: 'Are you sure?',
+      message: 'Do you really want to delete this product',
+      buttons: [{
+        text: 'Cancel',
+        role: 'cancel'
+      }, {
+        text: 'Delete',
+        handler: () => {
+          this.productsService.deleteProduct(this.loadedProduct.id);
+          this.router.navigate(['/products']);
+        }
+      }]
+    }).then(alertEl => {
+      alertEl.present();
+    });
   }
 
 }

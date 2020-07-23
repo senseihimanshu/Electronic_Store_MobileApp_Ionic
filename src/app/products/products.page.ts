@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 
 import { Product } from './product.model';
 import { ProductsService } from './products.service';
@@ -8,12 +8,12 @@ import { ProductsService } from './products.service';
   templateUrl: './products.page.html',
   styleUrls: ['./products.page.scss'],
 })
-export class ProductsPage implements OnInit {
+export class ProductsPage {
   products: Product[];
 
   constructor(private productsService: ProductsService) { }
 
-  ngOnInit() {
+  ionViewWillEnter() {
     this.products = this.productsService.getAllProducts();
   }
 

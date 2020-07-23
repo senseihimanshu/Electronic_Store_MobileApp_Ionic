@@ -9,7 +9,7 @@ export class ProductsService {
   private products: Product[] = [{
     id: 1,
     name: 'Samsung Galaxy Note',
-    image: 'https://www.google.com/url?sa=i&url=https%3A%2F%2Findianexpress.com%2Farticle%2Ftechnology%2Ftech-reviews%2Fsamsung-galaxy-note-10-quick-review-5929032%2F&psig=AOvVaw1iiIQ3nu3IR2MsRvF3yYBc&ust=1595544847376000&source=images&cd=vfe&ved=0CAIQjRxqFwoTCPjjqPL54eoCFQAAAAAdAAAAABAD',
+    image: 'https://fdn2.gsmarena.com/vv/pics/samsung/samsung-galaxy-note10-plus-aura-glow.jpg',
     description: 'A mobile phone',
     type: 'mobile',
     specs: {
@@ -34,7 +34,6 @@ export class ProductsService {
   constructor() { }
 
   getAllProducts(): Product[] {
-    console.log(this.products);
     return [...this.products];
   }
 
@@ -44,5 +43,11 @@ export class ProductsService {
         return id === product.id;
       })
     };
+  }
+
+  deleteProduct(id: number): void {
+    this.products = this.products.filter((product: Product) => {
+      return product.id !== id;
+    });
   }
 }

@@ -1,19 +1,14 @@
 <ion-header>
   <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button menu="sidebar"></ion-menu-button>
+    </ion-buttons>
     <ion-title>Products</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
   <ion-list>
-    <ion-item *ngFor="let product of products">
-      <ion-avatar slot="start">
-        <ion-img [src]="product.image"></ion-img>
-      </ion-avatar>
-      <ion-label>
-        <h2>{{ product.name }}</h2>
-        <h3>{{ product.description }}</h3>
-      </ion-label>
-    </ion-item>
+    <app-product-item *ngFor="let product of products" [product]="product"></app-product-item>
   </ion-list>
 </ion-content>
