@@ -1,0 +1,14 @@
+{
+  "appId": "io.ionic.starter",
+  "appName": "electronic-store",
+  "bundledWebRuntime": false,
+  "npmClient": "npm",
+  "webDir": "www",
+  "plugins": {
+    "SplashScreen": {
+      "launchShowDuration": 0
+    }
+  },
+  "linuxAndroidStudioPath": "/opt/android-studio/bin/studio.sh",
+  "cordova": {}
+}

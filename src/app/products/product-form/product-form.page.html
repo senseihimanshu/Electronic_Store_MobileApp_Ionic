@@ -3,7 +3,7 @@
     <ion-buttons slot="start">
       <ion-back-button defaultHref="/products"></ion-back-button>
     </ion-buttons>
-    <ion-title>{{ formType ? 'New Product' : 'Update Product' }}</ion-title>
+    <ion-title>{{ formType === 'create' ? 'New Product' : 'Update Product' }}</ion-title>
     <ion-buttons slot="primary">
       <ion-button form="product-form" [disabled]="!form.valid">
         <ion-icon name="checkmark" slot="icon-only"></ion-icon>
@@ -116,6 +116,11 @@
           </ion-col>
         </ion-row>
       </div>
+      <ion-row>
+        <ion-col size-sm="3" offset-sm="3">
+          <app-image-picker (imagePick)="onImagePicked($event)"></app-image-picker>
+        </ion-col>
+      </ion-row>
       {{ form.valid | json }}
       {{ form.value | json }}
       {{ form.errors | json }}

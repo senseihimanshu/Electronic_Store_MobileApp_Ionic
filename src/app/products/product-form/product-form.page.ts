@@ -19,7 +19,7 @@ export class ProductFormPage implements OnInit {
     this.activatedRoute.paramMap.subscribe((paramMap) => {
       (paramMap.get('productId'), isNumberForString);
       if (!paramMap.has('productId')) {
-        this.formType === 'create';
+        this.formType = 'create';
         return;
       }
 
@@ -28,7 +28,7 @@ export class ProductFormPage implements OnInit {
         return;
       }
 
-      this.formType === 'update';
+      this.formType = 'update';
 
       const productId = Number(paramMap.get('productId'));
 
@@ -48,5 +48,9 @@ export class ProductFormPage implements OnInit {
         (this.productForm, 'productForm');
       });
     })
+  }
+
+  onImagePicked(imageData: string) {
+    console.log(imageData, 'Image data');
   }
 }
