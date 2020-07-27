@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ProductsService } from '../products.service';
 import { Product } from '../product.model';
@@ -23,7 +23,21 @@ export class ProductDetailPage implements OnInit {
 
       const productId = Number(paramMap.get('productId'));
 
-      this.loadedProduct = this.productsService.getProduct(productId);
+      this.productsService.getProduct(productId.toString()).subscribe((product: Product) => {
+        (product);
+        if (product.product_type === 'mobile') {
+          this.productsService.getMobile(product.id.toString()).subscribe((specs: Product['specs']) => {
+            product.specs = specs[0];
+          })
+        }
+        if (product.product_type === 'laptop') {
+          this.productsService.getLaptop(product.id.toString()).subscribe((specs: Product['specs']) => {
+            product.specs = specs[0];
+          })
+        }
+        this.loadedProduct = product;
+        (this.loadedProduct, 'loadedProduct');
+      });
     })
   }
 
@@ -37,7 +51,7 @@ export class ProductDetailPage implements OnInit {
       }, {
         text: 'Delete',
         handler: () => {
-          this.productsService.deleteProduct(this.loadedProduct.id);
+          // this.productsService.deleteProduct(this.loadedProduct.id);
           this.router.navigate(['/products']);
         }
       }]

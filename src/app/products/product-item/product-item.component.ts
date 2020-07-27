@@ -17,6 +17,6 @@ export class ProductItemComponent implements OnInit {
 
   onEdit(productId: number, slidingElement: IonItemSliding): void {
     slidingElement.close();
-    console.log(productId);
+    (productId);
   }
 }

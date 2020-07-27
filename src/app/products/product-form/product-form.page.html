@@ -3,9 +3,9 @@
     <ion-buttons slot="start">
       <ion-back-button defaultHref="/products"></ion-back-button>
     </ion-buttons>
-    <ion-title>New Product</ion-title>
+    <ion-title>{{ formType ? 'New Product' : 'Update Product' }}</ion-title>
     <ion-buttons slot="primary">
-      <ion-button>
+      <ion-button form="product-form" [disabled]="!form.valid">
         <ion-icon name="checkmark" slot="icon-only"></ion-icon>
       </ion-button>
     </ion-buttons>
@@ -13,13 +13,13 @@
 </ion-header>
 
 <ion-content>
-  <form>
+  <form id="product-form" #form="ngForm">
     <ion-grid>
       <ion-row>
         <ion-col size-sm="6" offset-sm="3">
           <ion-item>
             <ion-label position="floating">Product Name</ion-label>
-            <ion-input type="text"></ion-input>
+            <ion-input type="text" name="name" required [ngModel]="productForm?.name"></ion-input>
           </ion-item>
         </ion-col>
       </ion-row>
@@ -27,7 +27,7 @@
         <ion-col size-sm="6" offset-sm="3">
           <ion-item>
             <ion-label position="floating">Description</ion-label>
-            <ion-textarea rows="3"></ion-textarea>
+            <ion-textarea rows="3" name="description" required [ngModel]="productForm?.description"></ion-textarea>
           </ion-item>
         </ion-col>
       </ion-row>
@@ -36,15 +36,7 @@
           <p>Description must be between 1 and 180 characters.</p>
         </ion-col> -->
       </ion-row>
-      <ion-row>
-        <ion-col size-sm="6" offset-sm="3">
-          <ion-item>
-            <ion-label position="floating">Price</ion-label>
-            <ion-input type="number"></ion-input>
-          </ion-item>
-        </ion-col>
-      </ion-row>
-      <ion-radio-group>
+      <ion-radio-group name="product_type" required [ngModel]="productForm?.product_type" #productType="ngModel">
         <ion-row>
           <ion-col size-sm="3" offset-sm="3">
             <ion-item>
@@ -61,12 +53,12 @@
         </ion-row>
       </ion-radio-group>
 
-      <div class="mobile">
+      <div class="mobile" *ngIf="productType.value === 'mobile'">
         <ion-row>
           <ion-col>
             <ion-item>
               <ion-label position="floating">Processor</ion-label>
-              <ion-input type="text"></ion-input>
+              <ion-input type="text" name="processor" required [ngModel]="productForm?.specs?.processor"></ion-input>
             </ion-item>
           </ion-col>
         </ion-row>
@@ -74,7 +66,7 @@
           <ion-col>
             <ion-item>
               <ion-label position="floating">RAM</ion-label>
-              <ion-input type="text"></ion-input>
+              <ion-input type="text" name="ram" required [ngModel]="productForm?.specs?.ram"></ion-input>
             </ion-item>
           </ion-col>
         </ion-row>
@@ -82,7 +74,8 @@
           <ion-col>
             <ion-item>
               <ion-label position="floating">Screen Size</ion-label>
-              <ion-input type="text"></ion-input>
+              <ion-input type="text" name="screen_size" required [ngModel]="productForm?.specs?.screen_size">
+              </ion-input>
             </ion-item>
           </ion-col>
         </ion-row>
@@ -90,18 +83,18 @@
           <ion-col>
             <ion-item>
               <ion-label position="floating">Color</ion-label>
-              <ion-input type="text"></ion-input>
+              <ion-input type="text" name="color" required [ngModel]="productForm?.specs?.color"></ion-input>
             </ion-item>
           </ion-col>
         </ion-row>
       </div>
 
-      <div class="laptop">
+      <div class="laptop" *ngIf="productType.value === 'laptop'">
         <ion-row>
           <ion-col>
             <ion-item>
               <ion-label position="floating">Processor</ion-label>
-              <ion-input type="text"></ion-input>
+              <ion-input type="text" name="processor" required [ngModel]="productForm?.specs?.processor"></ion-input>
             </ion-item>
           </ion-col>
         </ion-row>
@@ -109,7 +102,7 @@
           <ion-col>
             <ion-item>
               <ion-label position="floating">RAM</ion-label>
-              <ion-input type="text"></ion-input>
+              <ion-input type="text" name="ram" required [ngModel]="productForm?.specs?.ram"></ion-input>
             </ion-item>
           </ion-col>
         </ion-row>
@@ -117,12 +110,15 @@
           <ion-col>
             <ion-item>
               <ion-label position="floating">HD Capacity</ion-label>
-              <ion-input type="text"></ion-input>
+              <ion-input type="text" name="hd_capacity" required [ngModel]="productForm?.specs?.hd_capacity">
+              </ion-input>
             </ion-item>
           </ion-col>
         </ion-row>
       </div>
-
+      {{ form.valid | json }}
+      {{ form.value | json }}
+      {{ form.errors | json }}
     </ion-grid>
   </form>
 </ion-content>

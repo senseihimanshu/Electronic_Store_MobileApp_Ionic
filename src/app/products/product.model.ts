@@ -1,21 +1,24 @@
 interface Mobile {
     processor: string;
     ram: string;
-    screenSize: string;
+    screen_size: string;
     color: string;
 }
 
 interface Laptop {
     processor: string;
     ram: string;
-    hdCapacity: string;
+    hd_capacity: string;
 }
+
+interface MobileOrLaptop extends Mobile, Laptop { }
 
 export interface Product {
     id?: number;
     name: string;
     image: string;
     description: string;
-    type: 'mobile' | 'laptop';
-    specs: Mobile | Laptop;
+    product_type: 'mobile' | 'laptop';
+    specs: MobileOrLaptop;
+    created_on: Date;
 }

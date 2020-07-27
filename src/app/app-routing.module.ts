@@ -24,6 +24,10 @@ const routes: Routes = [
         loadChildren: () => import('./products/product-form/product-form.module').then(m => m.ProductFormPageModule)
       },
       {
+        path: 'edit/:productId',
+        loadChildren: () => import('./products/product-form/product-form.module').then(m => m.ProductFormPageModule)
+      },
+      {
         path: ':productId',
         loadChildren: () => import('./products/product-detail/product-detail.module').then(m => m.ProductDetailPageModule)
       }
