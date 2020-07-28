@@ -32,7 +32,12 @@ export class ProductsService {
   }
 
   createProduct(product: Product): Observable<any> {
-    return this.http.post<any>(PRODUCT_API, product);
+    var formData = new FormData();
+    for (var key in product) {
+      formData.append(key, product[key]);
+    }
+
+    return this.http.post<any>(PRODUCT_API, formData);
   }
 
   createMobile(mobile: any): Observable<any> {
@@ -44,7 +49,12 @@ export class ProductsService {
   }
 
   updateProduct(product: Product, productId: string): Observable<any> {
-    return this.http.put<any>(`${PRODUCT_API}${productId}/`, product);
+    var formData = new FormData();
+    for (var key in product) {
+      formData.append(key, product[key]);
+    }
+
+    return this.http.put<any>(`${PRODUCT_API}${productId}/`, formData);
   }
 
   updateMobile(mobile: any, mobileId: string): Observable<any> {

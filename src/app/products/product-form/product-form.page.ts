@@ -94,9 +94,10 @@ export class ProductFormPage implements OnInit {
   }
 
   onSubmit(product: any): void {
-    console.log(this.image, 'THIS.IMAGE');
+    var imageFile = new File([this.image], `${Date.now()}.jpg`);
+    console.log(this.image, 'THIS.IMAGE', imageFile);
     if (this.formType === 'create') {
-      this.productsService.createProduct({ name: product.name, description: product.description, image: this.image, product_type: product.product_type }).subscribe((res: any) => {
+      this.productsService.createProduct({ name: product.name, description: product.description, image: imageFile, product_type: product.product_type }).subscribe((res: any) => {
         console.log(res, 'Response');
         const productId = res.id;
         if (product.product_type === 'mobile') {
@@ -113,8 +114,8 @@ export class ProductFormPage implements OnInit {
     }
 
     if (this.formType === 'update') {
-      console.log(this.image, 'this.image');
-      this.productsService.updateProduct({ name: product.name, description: product.description, image: this.image, product_type: product.product_type }, this.productForm.id.toString()).subscribe((res: any) => {
+      console.log(imageFile, 'imageFile');
+      this.productsService.updateProduct({ name: product.name, description: product.description, image: imageFile, product_type: product.product_type }, this.productForm.id.toString()).subscribe((res: any) => {
         console.log(res, 'Response', this.productType, 'this.productType');
         const productId = res.id;
         if (this.productType !== product.product_type) {
