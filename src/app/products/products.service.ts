@@ -11,31 +11,6 @@ const PRODUCT_API = `${HOST}/product/`;
   providedIn: 'root'
 })
 export class ProductsService {
-  // private products: Product[] = [{
-  //   id: 1,
-  //   name: 'Samsung Galaxy Note',
-  //   image: 'https://fdn2.gsmarena.com/vv/pics/samsung/samsung-galaxy-note10-plus-aura-glow.jpg',
-  //   description: 'A mobile phone',
-  //   type: 'mobile',
-  //   specs: {
-  //     processor: 'Octa Core',
-  //     ram: '8 GB',
-  //     screenSize: '5"5\'',
-  //     color: 'Carbon Black'
-  //   }
-  // }, {
-  //   id: 2,
-  //   name: 'Mac Book Pro',
-  //   image: 'https://techcrunch.com/wp-content/uploads/2019/11/MacBook-Pro-16-IMG_2820-1.jpeg',
-  //   description: 'A Laptop',
-  //   type: 'laptop',
-  //   specs: {
-  //     processor: 'Octa Core',
-  //     ram: '16 GB',
-  //     hdCapacity: 'XYZ'
-  //   }
-  // }];
-
   constructor(private http: HttpClient) { }
 
   getAllProducts(): Observable<Product[]> {
@@ -48,17 +23,47 @@ export class ProductsService {
 
   getMobile(productId: string): Observable<any> {
     const params = new HttpParams().set('product', productId);
-    return this.http.get<any>(PRODUCT_API + 'mobile/', { ...params });
+    return this.http.get<any>(PRODUCT_API + 'mobile/', { params });
   }
 
   getLaptop(productId: string): Observable<any> {
     const params = new HttpParams().set('product', productId);
-    return this.http.get<any>(PRODUCT_API + 'laptop/', { ...params });
+    return this.http.get<any>(PRODUCT_API + 'laptop/', { params });
   }
 
-  // deleteProduct(id: number): void {
-  //   this.products = this.products.filter((product: Product) => {
-  //     return product.id !== id;
-  //   });
-  // }
+  createProduct(product: Product): Observable<any> {
+    return this.http.post<any>(PRODUCT_API, product);
+  }
+
+  createMobile(mobile: any): Observable<any> {
+    return this.http.post<any>(PRODUCT_API + 'mobile/', mobile);
+  }
+
+  createLaptop(laptop: any): Observable<any> {
+    return this.http.post<any>(PRODUCT_API + 'laptop/', laptop);
+  }
+
+  updateProduct(product: Product, productId: string): Observable<any> {
+    return this.http.put<any>(`${PRODUCT_API}${productId}/`, product);
+  }
+
+  updateMobile(mobile: any, mobileId: string): Observable<any> {
+    return this.http.put<any>(`${PRODUCT_API}mobile/${mobileId}/`, mobile);
+  }
+
+  updateLaptop(laptop: any, laptopId: string): Observable<any> {
+    return this.http.put<any>(`${PRODUCT_API}laptop/${laptopId}/`, laptop);
+  }
+
+  deleteProduct(id: number): Observable<any> {
+    return this.http.delete<any>(PRODUCT_API + id + '/');
+  }
+
+  deleteMobile(mobileId: string): Observable<any> {
+    return this.http.delete<any>(`${PRODUCT_API}mobile/${mobileId}/`);
+  }
+
+  deleteLaptop(laptopId: string): Observable<any> {
+    return this.http.delete<any>(`${PRODUCT_API}laptop/${laptopId}/`);
+  }
 }

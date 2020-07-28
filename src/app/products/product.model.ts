@@ -16,9 +16,9 @@ interface MobileOrLaptop extends Mobile, Laptop { }
 export interface Product {
     id?: number;
     name: string;
-    image: string;
+    image: Blob;
     description: string;
     product_type: 'mobile' | 'laptop';
-    specs: MobileOrLaptop;
-    created_on: Date;
+    specs?: MobileOrLaptop;
+    created_on?: Date;
 }

@@ -35,6 +35,9 @@ export class ProductFormPage implements OnInit {
   formType: 'create' | 'update';
   image: Blob;
 
+  // Used for deleting data after update if changes and create, else patch
+  productType: Product['product_type'];
+
   constructor(private productsService: ProductsService, private activatedRoute: ActivatedRoute, private router: Router) { }
 
   ngOnInit() {
@@ -66,8 +69,8 @@ export class ProductFormPage implements OnInit {
             product.specs = specs[0];
           })
         }
+        this.productType = product.product_type;
         this.productForm = product;
-        (this.productForm, 'productForm');
       });
     })
   }
@@ -81,7 +84,6 @@ export class ProductFormPage implements OnInit {
           'image/jpeg'
         );
       } catch (error) {
-
         return;
       }
     } else {
@@ -89,5 +91,82 @@ export class ProductFormPage implements OnInit {
     }
 
     this.image = imageFile;
+  }
+
+  onSubmit(product: any): void {
+    console.log(this.image, 'THIS.IMAGE');
+    if (this.formType === 'create') {
+      this.productsService.createProduct({ name: product.name, description: product.description, image: this.image, product_type: product.product_type }).subscribe((res: any) => {
+        console.log(res, 'Response');
+        const productId = res.id;
+        if (product.product_type === 'mobile') {
+          this.productsService.createMobile({ product: productId, processor: product.processor, ram: product.ram, screen_size: product.screen_size, color: product.color }).subscribe((res: any) => {
+            console.log(res, 'RESPONSE INSIDE');
+          })
+        }
+        if (product.product_type === 'laptop') {
+          this.productsService.createLaptop({ product: productId, processor: product.processor, ram: product.ram, hd_capacity: product.hd_capacity }).subscribe((res: any) => {
+            console.log(res, 'RESPONSE INSIDE');
+          })
+        }
+      });
+    }
+
+    if (this.formType === 'update') {
+      console.log(this.image, 'this.image');
+      this.productsService.updateProduct({ name: product.name, description: product.description, image: this.image, product_type: product.product_type }, this.productForm.id.toString()).subscribe((res: any) => {
+        console.log(res, 'Response', this.productType, 'this.productType');
+        const productId = res.id;
+        if (this.productType !== product.product_type) {
+          if (product.product_type === 'mobile') {
+            this.productsService.createMobile({ product: productId, processor: product.processor, ram: product.ram, screen_size: product.screen_size, color: product.color }).subscribe((res: any) => {
+              console.log(res, 'RESPONSE INSIDE');
+            });
+
+            this.productsService.getLaptop(productId).subscribe((res: any) => {
+              console.log(res, 'RESPONSE INSIDE Get Mobile');
+              const laptopId = res[0].id;
+              this.productsService.deleteLaptop(laptopId).subscribe((res: any) => {
+                console.log(res, 'RESPONSE INSIDE');
+              });
+            });
+          }
+          if (product.product_type === 'laptop') {
+            this.productsService.createLaptop({ product: productId, processor: product.processor, ram: product.ram, hd_capacity: product.hd_capacity }).subscribe((res: any) => {
+              console.log(res, 'RESPONSE INSIDE');
+            });
+
+            this.productsService.getMobile(productId).subscribe((res: any) => {
+              console.log(res, 'RESPONSE INSIDE Get Mobile');
+              const mobileId = res[0].id;
+              this.productsService.deleteMobile(mobileId).subscribe((res: any) => {
+                console.log(res, 'RESPONSE INSIDE');
+              });
+            });
+          }
+        }
+        else {
+          if (product.product_type === 'mobile') {
+            this.productsService.getMobile(productId).subscribe((res: any) => {
+              console.log(res, 'RESPONSE INSIDE Get Mobile');
+              const mobileId = res[0].id;
+              this.productsService.updateMobile({ processor: product.processor, ram: product.ram, screen_size: product.screen_size, color: product.color, product: productId }, mobileId).subscribe((res: any) => {
+                console.log(res, 'RESPONSE INSIDE');
+              })
+            });
+          }
+          if (product.product_type === 'laptop') {
+            this.productsService.getLaptop(productId).subscribe((res: any) => {
+              console.log(res, 'RESPONSE INSIDE Get laptop');
+              const laptopId = res[0].id;
+              this.productsService.updateLaptop({ processor: product.processor, ram: product.ram, hd_capacity: product.hd_capacity, product: productId }, laptopId).subscribe((res: any) => {
+                console.log(res, 'RESPONSE INSIDE');
+              })
+            });
+          }
+        }
+      });
+    }
+    this.router.navigateByUrl('/products');
   }
 }
