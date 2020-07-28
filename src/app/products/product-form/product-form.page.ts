@@ -3,6 +3,7 @@ import { Product } from '../product.model';
 import { ProductsService } from '../products.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { isNumberForString } from '../../utils/isNumber';
+import { AlertController } from '@ionic/angular';
 
 function base64toBlob(base64Data, contentType) {
   contentType = contentType || '';
@@ -38,7 +39,7 @@ export class ProductFormPage implements OnInit {
   // Used for deleting data after update if changes and create, else patch
   productType: Product['product_type'];
 
-  constructor(private productsService: ProductsService, private activatedRoute: ActivatedRoute, private router: Router) { }
+  constructor(private productsService: ProductsService, private activatedRoute: ActivatedRoute, private router: Router, private alertController: AlertController) { }
 
   ngOnInit() {
     this.activatedRoute.paramMap.subscribe((paramMap) => {
@@ -69,6 +70,7 @@ export class ProductFormPage implements OnInit {
             product.specs = specs[0];
           })
         }
+        this.image = product.image;
         this.productType = product.product_type;
         this.productForm = product;
       });
@@ -94,7 +96,9 @@ export class ProductFormPage implements OnInit {
   }
 
   onSubmit(product: any): void {
-    var imageFile = new File([this.image], `${Date.now()}.jpg`);
+    if (this.image instanceof Blob) {
+      var imageFile = new File([this.image], `${Date.now()}.jpg`);
+    }
     console.log(this.image, 'THIS.IMAGE', imageFile);
     if (this.formType === 'create') {
       this.productsService.createProduct({ name: product.name, description: product.description, image: imageFile, product_type: product.product_type }).subscribe((res: any) => {
@@ -103,11 +107,31 @@ export class ProductFormPage implements OnInit {
         if (product.product_type === 'mobile') {
           this.productsService.createMobile({ product: productId, processor: product.processor, ram: product.ram, screen_size: product.screen_size, color: product.color }).subscribe((res: any) => {
             console.log(res, 'RESPONSE INSIDE');
+            this.alertController.create({
+              header: 'Created Successfully.',
+              message: 'Product created successfully',
+              buttons: [{
+                text: 'Ok',
+                role: 'cancel'
+              }]
+            }).then(alertEl => {
+              alertEl.present();
+            });;
           })
         }
         if (product.product_type === 'laptop') {
           this.productsService.createLaptop({ product: productId, processor: product.processor, ram: product.ram, hd_capacity: product.hd_capacity }).subscribe((res: any) => {
             console.log(res, 'RESPONSE INSIDE');
+            this.alertController.create({
+              header: 'Created Successfully.',
+              message: 'Product created successfully',
+              buttons: [{
+                text: 'Ok',
+                role: 'cancel'
+              }]
+            }).then(alertEl => {
+              alertEl.present();
+            });;
           })
         }
       });
@@ -129,6 +153,16 @@ export class ProductFormPage implements OnInit {
               const laptopId = res[0].id;
               this.productsService.deleteLaptop(laptopId).subscribe((res: any) => {
                 console.log(res, 'RESPONSE INSIDE');
+                this.alertController.create({
+                  header: 'Updated Successfully.',
+                  message: 'Product updated successfully',
+                  buttons: [{
+                    text: 'Ok',
+                    role: 'cancel'
+                  }]
+                }).then(alertEl => {
+                  alertEl.present();
+                });;
               });
             });
           }
@@ -142,6 +176,16 @@ export class ProductFormPage implements OnInit {
               const mobileId = res[0].id;
               this.productsService.deleteMobile(mobileId).subscribe((res: any) => {
                 console.log(res, 'RESPONSE INSIDE');
+                this.alertController.create({
+                  header: 'Updated Successfully.',
+                  message: 'Product updated successfully',
+                  buttons: [{
+                    text: 'Ok',
+                    role: 'cancel'
+                  }]
+                }).then(alertEl => {
+                  alertEl.present();
+                });;
               });
             });
           }
@@ -153,6 +197,16 @@ export class ProductFormPage implements OnInit {
               const mobileId = res[0].id;
               this.productsService.updateMobile({ processor: product.processor, ram: product.ram, screen_size: product.screen_size, color: product.color, product: productId }, mobileId).subscribe((res: any) => {
                 console.log(res, 'RESPONSE INSIDE');
+                this.alertController.create({
+                  header: 'Updated Successfully.',
+                  message: 'Product updated successfully',
+                  buttons: [{
+                    text: 'Ok',
+                    role: 'cancel'
+                  }]
+                }).then(alertEl => {
+                  alertEl.present();
+                });;
               })
             });
           }
@@ -162,6 +216,16 @@ export class ProductFormPage implements OnInit {
               const laptopId = res[0].id;
               this.productsService.updateLaptop({ processor: product.processor, ram: product.ram, hd_capacity: product.hd_capacity, product: productId }, laptopId).subscribe((res: any) => {
                 console.log(res, 'RESPONSE INSIDE');
+                this.alertController.create({
+                  header: 'Updated Successfully.',
+                  message: 'Product updated successfully',
+                  buttons: [{
+                    text: 'Ok',
+                    role: 'cancel'
+                  }]
+                }).then(alertEl => {
+                  alertEl.present();
+                });;
               })
             });
           }

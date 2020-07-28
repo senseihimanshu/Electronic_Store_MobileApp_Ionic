@@ -51,14 +51,17 @@ export class ProductsService {
   updateProduct(product: Product, productId: string): Observable<any> {
     var formData = new FormData();
     for (var key in product) {
+      if (key === 'image' && !(product[key] instanceof File)) {
+        continue;
+      }
       formData.append(key, product[key]);
     }
 
-    return this.http.put<any>(`${PRODUCT_API}${productId}/`, formData);
+    return this.http.patch<any>(`${PRODUCT_API}${productId}/`, formData);
   }
 
   updateMobile(mobile: any, mobileId: string): Observable<any> {
-    return this.http.put<any>(`${PRODUCT_API}mobile/${mobileId}/`, mobile);
+    return this.http.patch<any>(`${PRODUCT_API}mobile/${mobileId}/`, mobile);
   }
 
   updateLaptop(laptop: any, laptopId: string): Observable<any> {

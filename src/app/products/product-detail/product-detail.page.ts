@@ -51,7 +51,16 @@ export class ProductDetailPage implements OnInit {
       }, {
         text: 'Delete',
         handler: () => {
-          // this.productsService.deleteProduct(this.loadedProduct.id);
+          this.productsService.deleteProduct(this.loadedProduct.id).subscribe(() => {
+            this.alertController.create({
+              header: 'Deleted Successfully.',
+              message: 'Product deleted successfully',
+              buttons: [{
+                text: 'Ok',
+                role: 'cancel'
+              }]
+            });
+          });
           this.router.navigate(['/products']);
         }
       }]
