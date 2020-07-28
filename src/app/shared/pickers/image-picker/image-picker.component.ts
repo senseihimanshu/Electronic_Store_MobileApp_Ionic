@@ -30,11 +30,6 @@ export class ImagePickerComponent implements OnInit {
   constructor(private platform: Platform) { }
 
   ngOnInit() {
-    console.log('Mobile:', this.platform.is('mobile'));
-    console.log('Hybrid:', this.platform.is('hybrid'));
-    console.log('iOS:', this.platform.is('ios'));
-    console.log('Android:', this.platform.is('android'));
-    console.log('Desktop:', this.platform.is('desktop'));
     if (
       (this.platform.is('mobile') && !this.platform.is('hybrid')) ||
       this.platform.is('desktop')
@@ -54,14 +49,14 @@ export class ImagePickerComponent implements OnInit {
       correctOrientation: true,
       // height: 320,
       width: 300,
-      resultType: CameraResultType.Base64
+      resultType: CameraResultType.DataUrl
     })
       .then(image => {
-        this.selectedImage = image.base64String;
-        this.imagePick.emit(image.base64String);
+        this.selectedImage = image.dataUrl;
+        this.imagePick.emit(image.dataUrl);
       })
       .catch(error => {
-        console.log(error);
+
         if (this.usePicker) {
           this.filePickerRef.nativeElement.click();
         }
@@ -79,6 +74,7 @@ export class ImagePickerComponent implements OnInit {
       const dataUrl = fr.result.toString();
       this.selectedImage = dataUrl;
       this.imagePick.emit(pickedFile);
+
     };
     fr.readAsDataURL(pickedFile);
   }
