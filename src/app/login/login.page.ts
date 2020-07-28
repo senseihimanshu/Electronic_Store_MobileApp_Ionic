@@ -21,7 +21,7 @@ export class LoginPage {
     }, async (err: HttpErrorResponse) => {
       const alert = await this.alertController.create({
         header: 'Login Unsuccessful',
-        subHeader: err.error.error.message,
+        subHeader: err.error.non_field_errors[0],
         message: 'Please enter correct credentials',
         buttons: ['Cancel']
       });

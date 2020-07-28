@@ -8,7 +8,7 @@ import { AuthService } from './auth.service';
 export class PreventLoginService implements CanActivate {
     constructor(public auth: AuthService, public router: Router) { }
     canActivate(): boolean {
-        console.log(this.auth.isAuthenticated());
+
         return !this.auth.isAuthenticated();
     }
 }

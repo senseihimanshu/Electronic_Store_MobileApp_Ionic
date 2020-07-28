@@ -95,97 +95,68 @@ export class ProductFormPage implements OnInit {
     this.image = imageFile;
   }
 
+  showAlert(header: string, message: string) {
+    this.alertController.create({
+      header: header,
+      message: message,
+      buttons: [{
+        text: 'Ok',
+        role: 'cancel'
+      }]
+    }).then(alertEl => {
+      alertEl.present();
+    });;
+  }
+
   onSubmit(product: any): void {
     if (this.image instanceof Blob) {
       var imageFile = new File([this.image], `${Date.now()}.jpg`);
     }
-    console.log(this.image, 'THIS.IMAGE', imageFile);
+
     if (this.formType === 'create') {
       this.productsService.createProduct({ name: product.name, description: product.description, image: imageFile, product_type: product.product_type }).subscribe((res: any) => {
-        console.log(res, 'Response');
+
         const productId = res.id;
         if (product.product_type === 'mobile') {
           this.productsService.createMobile({ product: productId, processor: product.processor, ram: product.ram, screen_size: product.screen_size, color: product.color }).subscribe((res: any) => {
-            console.log(res, 'RESPONSE INSIDE');
-            this.alertController.create({
-              header: 'Created Successfully.',
-              message: 'Product created successfully',
-              buttons: [{
-                text: 'Ok',
-                role: 'cancel'
-              }]
-            }).then(alertEl => {
-              alertEl.present();
-            });;
+            this.showAlert('Created Successfully.', 'Product created successfully');
           })
         }
         if (product.product_type === 'laptop') {
           this.productsService.createLaptop({ product: productId, processor: product.processor, ram: product.ram, hd_capacity: product.hd_capacity }).subscribe((res: any) => {
-            console.log(res, 'RESPONSE INSIDE');
-            this.alertController.create({
-              header: 'Created Successfully.',
-              message: 'Product created successfully',
-              buttons: [{
-                text: 'Ok',
-                role: 'cancel'
-              }]
-            }).then(alertEl => {
-              alertEl.present();
-            });;
+            this.showAlert('Created Successfully.', 'Product created successfully');
           })
         }
       });
     }
 
     if (this.formType === 'update') {
-      console.log(imageFile, 'imageFile');
+
       this.productsService.updateProduct({ name: product.name, description: product.description, image: imageFile, product_type: product.product_type }, this.productForm.id.toString()).subscribe((res: any) => {
-        console.log(res, 'Response', this.productType, 'this.productType');
+
         const productId = res.id;
         if (this.productType !== product.product_type) {
           if (product.product_type === 'mobile') {
             this.productsService.createMobile({ product: productId, processor: product.processor, ram: product.ram, screen_size: product.screen_size, color: product.color }).subscribe((res: any) => {
-              console.log(res, 'RESPONSE INSIDE');
+
             });
 
             this.productsService.getLaptop(productId).subscribe((res: any) => {
-              console.log(res, 'RESPONSE INSIDE Get Mobile');
               const laptopId = res[0].id;
               this.productsService.deleteLaptop(laptopId).subscribe((res: any) => {
-                console.log(res, 'RESPONSE INSIDE');
-                this.alertController.create({
-                  header: 'Updated Successfully.',
-                  message: 'Product updated successfully',
-                  buttons: [{
-                    text: 'Ok',
-                    role: 'cancel'
-                  }]
-                }).then(alertEl => {
-                  alertEl.present();
-                });;
+                this.showAlert('Updated Successfully.', 'Product updated successfully');
               });
             });
           }
           if (product.product_type === 'laptop') {
             this.productsService.createLaptop({ product: productId, processor: product.processor, ram: product.ram, hd_capacity: product.hd_capacity }).subscribe((res: any) => {
-              console.log(res, 'RESPONSE INSIDE');
+
             });
 
             this.productsService.getMobile(productId).subscribe((res: any) => {
-              console.log(res, 'RESPONSE INSIDE Get Mobile');
               const mobileId = res[0].id;
               this.productsService.deleteMobile(mobileId).subscribe((res: any) => {
-                console.log(res, 'RESPONSE INSIDE');
-                this.alertController.create({
-                  header: 'Updated Successfully.',
-                  message: 'Product updated successfully',
-                  buttons: [{
-                    text: 'Ok',
-                    role: 'cancel'
-                  }]
-                }).then(alertEl => {
-                  alertEl.present();
-                });;
+                this.showAlert('Updated Successfully.', 'Product updated successfully');
               });
             });
           }
@@ -193,39 +164,18 @@ export class ProductFormPage implements OnInit {
         else {
           if (product.product_type === 'mobile') {
             this.productsService.getMobile(productId).subscribe((res: any) => {
-              console.log(res, 'RESPONSE INSIDE Get Mobile');
               const mobileId = res[0].id;
               this.productsService.updateMobile({ processor: product.processor, ram: product.ram, screen_size: product.screen_size, color: product.color, product: productId }, mobileId).subscribe((res: any) => {
-                console.log(res, 'RESPONSE INSIDE');
-                this.alertController.create({
-                  header: 'Updated Successfully.',
-                  message: 'Product updated successfully',
-                  buttons: [{
-                    text: 'Ok',
-                    role: 'cancel'
-                  }]
-                }).then(alertEl => {
-                  alertEl.present();
-                });;
+                this.showAlert('Updated Successfully.', 'Product updated successfully');
               })
             });
           }
           if (product.product_type === 'laptop') {
             this.productsService.getLaptop(productId).subscribe((res: any) => {
-              console.log(res, 'RESPONSE INSIDE Get laptop');
+
               const laptopId = res[0].id;
               this.productsService.updateLaptop({ processor: product.processor, ram: product.ram, hd_capacity: product.hd_capacity, product: productId }, laptopId).subscribe((res: any) => {
-                console.log(res, 'RESPONSE INSIDE');
-                this.alertController.create({
-                  header: 'Updated Successfully.',
-                  message: 'Product updated successfully',
-                  buttons: [{
-                    text: 'Ok',
-                    role: 'cancel'
-                  }]
-                }).then(alertEl => {
-                  alertEl.present();
-                });;
+                this.showAlert('Updated Successfully.', 'Product updated successfully');
               })
             });
           }
