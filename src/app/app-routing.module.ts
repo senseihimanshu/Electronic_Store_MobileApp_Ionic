@@ -6,6 +6,7 @@ import { PreventLoginService as PreventLoginGuard } from './services/prevent-log
 const routes: Routes = [
   {
     path: '',
+    canActivate: [AuthGuard],
     redirectTo: 'products',
     pathMatch: 'full'
   },
