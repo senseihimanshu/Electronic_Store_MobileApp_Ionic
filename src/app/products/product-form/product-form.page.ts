@@ -4,6 +4,7 @@ import { ProductsService } from '../products.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { isNumberForString } from '../../utils/isNumber';
 import { AlertController } from '@ionic/angular';
+import { HttpErrorResponse } from '@angular/common/http';
 
 function base64toBlob(base64Data, contentType) {
   contentType = contentType || '';
@@ -110,6 +111,19 @@ export class ProductFormPage implements OnInit {
     });
   }
 
+  errorAlert(type: string, message: string) {
+    this.alertController.create({
+      header: `Couldn't ${type}`,
+      message: message,
+      buttons: [{
+        text: 'Ok',
+        role: 'cancel'
+      }]
+    }).then(alertEl => {
+      alertEl.present();
+    });
+  }
+
   onSubmit(product: any): void {
     if (this.image instanceof Blob) {
       var imageFile = new File([this.image], `${Date.now()}.jpg`);
@@ -122,12 +136,28 @@ export class ProductFormPage implements OnInit {
         if (product.product_type === 'mobile') {
           this.productsService.createMobile({ product: productId, processor: product.processor, ram: product.ram, screen_size: product.screen_size, color: product.color }).subscribe((res: any) => {
             this.showAlert('Created Successfully.', 'Product created successfully');
-          })
+          }, (err: HttpErrorResponse) => {
+            let error: string;
+            this.productsService.deleteProduct(productId).subscribe((res) => { console.log(res) });
+            for (var key in err.error) {
+              error = `${key}: ${err.error[key][0]}`;
+              break;
+            }
+            this.errorAlert('Create', error);
+          });
         }
         if (product.product_type === 'laptop') {
           this.productsService.createLaptop({ product: productId, processor: product.processor, ram: product.ram, hd_capacity: product.hd_capacity }).subscribe((res: any) => {
             this.showAlert('Created Successfully.', 'Product created successfully');
-          })
+          }, (err: HttpErrorResponse) => {
+            let error: string;
+            this.productsService.deleteProduct(productId).subscribe((res) => { console.log(res) });
+            for (var key in err.error) {
+              error = `${key}: ${err.error[key][0]}`;
+              break;
+            }
+            this.errorAlert('Create', error);
+          });
         }
       });
     }
@@ -147,7 +177,14 @@ export class ProductFormPage implements OnInit {
               const laptopId = res[0].id;
               this.productsService.deleteLaptop(laptopId).subscribe((res: any) => {
                 this.showAlert('Updated Successfully.', 'Product updated successfully');
-              });
+              }), (err: HttpErrorResponse) => {
+                let error: string;
+                for (var key in err.error) {
+                  error = `${key}: ${err.error[key][0]}`;
+                  break;
+                }
+                this.errorAlert('Update', error);
+              }
             });
           }
           if (product.product_type === 'laptop') {
@@ -159,6 +196,13 @@ export class ProductFormPage implements OnInit {
               const mobileId = res[0].id;
               this.productsService.deleteMobile(mobileId).subscribe((res: any) => {
                 this.showAlert('Updated Successfully.', 'Product updated successfully');
+              }, (err: HttpErrorResponse) => {
+                let error: string;
+                for (var key in err.error) {
+                  error = `${key}: ${err.error[key][0]}`;
+                  break;
+                }
+                this.errorAlert('Update', error);
               });
             });
           }
@@ -169,6 +213,13 @@ export class ProductFormPage implements OnInit {
               const mobileId = res[0].id;
               this.productsService.updateMobile({ processor: product.processor, ram: product.ram, screen_size: product.screen_size, color: product.color, product: productId }, mobileId).subscribe((res: any) => {
                 this.showAlert('Updated Successfully.', 'Product updated successfully');
+              }, (err: HttpErrorResponse) => {
+                let error: string;
+                for (var key in err.error) {
+                  error = `${key}: ${err.error[key][0]}`;
+                  break;
+                }
+                this.errorAlert('Update', error);
               })
             });
           }
@@ -178,6 +229,13 @@ export class ProductFormPage implements OnInit {
               const laptopId = res[0].id;
               this.productsService.updateLaptop({ processor: product.processor, ram: product.ram, hd_capacity: product.hd_capacity, product: productId }, laptopId).subscribe((res: any) => {
                 this.showAlert('Updated Successfully.', 'Product updated successfully');
+              }, (err: HttpErrorResponse) => {
+                let error: string;
+                for (var key in err.error) {
+                  error = `${key}: ${err.error[key][0]}`;
+                  break;
+                }
+                this.errorAlert('Update', error);
               })
             });
           }
