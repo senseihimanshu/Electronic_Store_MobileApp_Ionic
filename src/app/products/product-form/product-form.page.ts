@@ -185,6 +185,14 @@ export class ProductFormPage implements OnInit {
                 }
                 this.errorAlert('Update', error);
               }
+                , (err: HttpErrorResponse) => {
+                  let error: string;
+                  for (var key in err.error) {
+                    error = `${key}: ${err.error[key][0]}`;
+                    break;
+                  }
+                  this.errorAlert('Update', error);
+                }
             });
           }
           if (product.product_type === 'laptop') {
@@ -204,6 +212,13 @@ export class ProductFormPage implements OnInit {
                 }
                 this.errorAlert('Update', error);
               });
+            }, (err: HttpErrorResponse) => {
+              let error: string;
+              for (var key in err.error) {
+                error = `${key}: ${err.error[key][0]}`;
+                break;
+              }
+              this.errorAlert('Update', error);
             });
           }
         }
@@ -221,6 +236,13 @@ export class ProductFormPage implements OnInit {
                 }
                 this.errorAlert('Update', error);
               })
+            }, (err: HttpErrorResponse) => {
+              let error: string;
+              for (var key in err.error) {
+                error = `${key}: ${err.error[key][0]}`;
+                break;
+              }
+              this.errorAlert('Update', error);
             });
           }
           if (product.product_type === 'laptop') {
@@ -237,6 +259,13 @@ export class ProductFormPage implements OnInit {
                 }
                 this.errorAlert('Update', error);
               })
+            }, (err: HttpErrorResponse) => {
+              let error: string;
+              for (var key in err.error) {
+                error = `${key}: ${err.error[key][0]}`;
+                break;
+              }
+              this.errorAlert('Update', error);
             });
           }
         }
