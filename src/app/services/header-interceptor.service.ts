@@ -8,11 +8,15 @@ export class HeaderInterceptorService implements HttpInterceptor {
         let ignore =
             typeof httpRequest.body === "undefined"
             || httpRequest.body === null
-            || httpRequest.body.toString() === "[object FormData]" // <-- This solves your problem
+            || httpRequest.body.toString() === "[object FormData]"
             || httpRequest.headers.has("Content-Type");
 
         if (ignore) {
-            return next.handle(httpRequest);
+            const headers = { 'Authorization': localStorage.getItem('Authorization') };
+            if (!headers['Authorization']) {
+                delete headers['Authorization']
+            }
+            return next.handle(httpRequest.clone({ setHeaders: headers }));
         }
 
         const headers = { 'Authorization': localStorage.getItem('Authorization'), 'Content-Type': 'application/json' };

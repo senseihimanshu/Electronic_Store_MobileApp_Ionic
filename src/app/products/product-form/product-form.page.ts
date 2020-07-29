@@ -105,7 +105,9 @@ export class ProductFormPage implements OnInit {
       }]
     }).then(alertEl => {
       alertEl.present();
-    });;
+    }).finally(() => {
+      this.router.navigateByUrl('/products');
+    });
   }
 
   onSubmit(product: any): void {
