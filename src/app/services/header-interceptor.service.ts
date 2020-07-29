@@ -13,10 +13,6 @@ export class HeaderInterceptorService implements HttpInterceptor {
 
         if (ignore) {
             const headers = { 'Authorization': localStorage.getItem('Authorization') };
-<<<<<<< HEAD
-=======
-
->>>>>>> tempbranch
             if (!headers['Authorization']) {
                 delete headers['Authorization']
             }
