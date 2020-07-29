@@ -184,6 +184,5 @@ export class ProductFormPage implements OnInit {
         }
       });
     }
-    this.router.navigateByUrl('/products');
   }
 }
