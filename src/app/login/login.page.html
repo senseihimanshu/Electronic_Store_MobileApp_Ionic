@@ -24,7 +24,8 @@
       </ion-row>
       <ion-row>
         <ion-col size-sm="6" offset-sm="3">
-          <ion-button type="submit" color="primary" expand="block" [disabled]="!form.valid">
+          <ion-spinner color="primary" *ngIf="isLoading"></ion-spinner>
+          <ion-button type="submit" color="primary" expand="block" [disabled]="!form.valid" *ngIf="!isLoading">
             Login
           </ion-button>
         </ion-col>

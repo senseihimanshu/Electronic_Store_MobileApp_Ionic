@@ -36,6 +36,7 @@ export class ProductFormPage implements OnInit {
   productForm: Product;
   formType: 'create' | 'update';
   image: Blob;
+  isLoading: boolean = false;
 
   // Used for deleting data after update if changes and create, else patch
   productType: Product['product_type'];
@@ -106,6 +107,7 @@ export class ProductFormPage implements OnInit {
       }]
     }).then(alertEl => {
       alertEl.present();
+      this.isLoading = !this.isLoading;
     }).finally(() => {
       this.router.navigateByUrl('/products');
     });
@@ -121,6 +123,7 @@ export class ProductFormPage implements OnInit {
       }]
     }).then(alertEl => {
       alertEl.present();
+      this.isLoading = !this.isLoading;
     });
   }
 
@@ -131,7 +134,7 @@ export class ProductFormPage implements OnInit {
 
     if (this.formType === 'create') {
       this.productsService.createProduct({ name: product.name, description: product.description, image: imageFile, product_type: product.product_type }).subscribe((res: any) => {
-
+        this.isLoading = !this.isLoading;
         const productId = res.id;
         if (product.product_type === 'mobile') {
           this.productsService.createMobile({ product: productId, processor: product.processor, ram: product.ram, screen_size: product.screen_size, color: product.color }).subscribe((res: any) => {
@@ -165,7 +168,7 @@ export class ProductFormPage implements OnInit {
     if (this.formType === 'update') {
 
       this.productsService.updateProduct({ name: product.name, description: product.description, image: imageFile, product_type: product.product_type }, this.productForm.id.toString()).subscribe((res: any) => {
-
+        this.isLoading = !this.isLoading;
         const productId = res.id;
         if (this.productType !== product.product_type) {
           if (product.product_type === 'mobile') {

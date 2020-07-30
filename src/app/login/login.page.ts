@@ -11,14 +11,18 @@ import { Router } from '@angular/router';
   styleUrls: ['./login.page.scss'],
 })
 export class LoginPage {
+  isLoading: boolean = false;
 
   constructor(private router: Router, private loginService: LoginService, public alertController: AlertController) { }
 
   onLogin(loginInput: ILogin): void {
+    this.isLoading = !this.isLoading;
     this.loginService.login(loginInput).subscribe((res: ILoginResponse) => {
       localStorage.setItem('Authorization', `Token ${res.token}`);
+      this.isLoading = !this.isLoading;
       this.router.navigateByUrl('/products');
     }, async (err: HttpErrorResponse) => {
+      this.isLoading = !this.isLoading;
       const alert = await this.alertController.create({
         header: 'Login Unsuccessful',
         subHeader: err.error.non_field_errors[0],
